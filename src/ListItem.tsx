@@ -16,8 +16,8 @@ export const ListItem = ({ item }: { item: ListItemType }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={onItemPress}>
-      <View style={styles.wrap}>
+    <View style={styles.wrap}>
+      <TouchableWithoutFeedback onPress={onItemPress}>
         <View style={styles.container}>
           <Image source={{ uri: item.image }} style={styles.image} />
           <View style={styles.textContainer}>
@@ -25,11 +25,11 @@ export const ListItem = ({ item }: { item: ListItemType }) => {
             <Text style={styles.text}>{item.subtitle}</Text>
           </View>
         </View>
-        {expanded && (
-          <Text style={[styles.details, styles.text]}>{item.details}</Text>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+      {expanded && (
+        <Text style={[styles.details, styles.text]}>{item.details}</Text>
+      )}
+    </View>
   );
 };
 
