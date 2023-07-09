@@ -67,6 +67,7 @@ export const ListItem = ({ item }: { item: ListItemType }) => {
           </View>
         </View>
       </TouchableWithoutFeedback>
+      
       <CollapsableContainer expanded={expanded}>
         <Text style={[styles.details, styles.text]}>{item.details}</Text>
       </CollapsableContainer>
