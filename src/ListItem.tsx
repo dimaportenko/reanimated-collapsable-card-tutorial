@@ -5,15 +5,40 @@ import {
   View,
   StyleSheet,
   TouchableWithoutFeedback,
+  LayoutChangeEvent,
 } from "react-native";
 import { ListItemType } from "./getData";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 export const ListItem = ({ item }: { item: ListItemType }) => {
   const [expanded, setExpanded] = useState(false);
+  const [height, setHeight] = useState(0);
+
+  const animatedHeight = useSharedValue(0);
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    const onLayoutHeight = event.nativeEvent.layout.height;
+
+    if (onLayoutHeight > 0 && height !== onLayoutHeight) {
+      setHeight(onLayoutHeight);
+    }
+  };
 
   const onItemPress = () => {
     setExpanded(!expanded);
   };
+
+  const collapsableStyle = useAnimatedStyle(() => {
+    animatedHeight.value = expanded ? withTiming(height) : withTiming(0);
+
+    return {
+      height: animatedHeight.value,
+    };
+  }, [expanded]);
 
   return (
     <View style={styles.wrap}>
@@ -26,9 +51,11 @@ export const ListItem = ({ item }: { item: ListItemType }) => {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      {expanded && (
-        <Text style={[styles.details, styles.text]}>{item.details}</Text>
-      )}
+      <Animated.View style={[collapsableStyle, {overflow: 'hidden'}]}>
+        <View style={{ position: 'absolute'  }} onLayout={onLayout}>
+          <Text style={[styles.details, styles.text]}>{item.details}</Text>
+        </View>
+      </Animated.View>
     </View>
   );
 };
