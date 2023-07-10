@@ -23,6 +23,14 @@ In this tutorial, we'll create an animated collapsable card using `react-native-
 
 <img src='./docs/result.gif' style="width:375px;" />
 
+<br>
+<br>
+<br>
+
+[![Youtube Thumb](./docs/youtube.png)](https://youtu.be/NzrJJLSbWf8 "Animated Collapsible Cards in React Native - Easier Than You Think")
+
+<br>
+
 ## Getting Started
 
 First, clone the project from GitHub and switch to the `template` branch:
