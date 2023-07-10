@@ -5,8 +5,46 @@ import {
   View,
   StyleSheet,
   TouchableWithoutFeedback,
+  LayoutChangeEvent,
 } from "react-native";
 import { ListItemType } from "./getData";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
+
+export const CollapsableContainer = ({
+  children,
+  expanded,
+}: {
+  children: React.ReactNode;
+  expanded: boolean;
+}) => {
+  const [height, setHeight] = useState(0);
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    const layoutHeight = event.nativeEvent.layout.height;
+
+    if (layoutHeight > 0 && layoutHeight !== height) {
+      setHeight(layoutHeight);
+    }
+  };
+
+  const animatedStyle = useAnimatedStyle(() => {
+    const animatedHeight = expanded ? withTiming(height) : withTiming(0);
+    return {
+      height: animatedHeight,
+    };
+  });
+
+  return (
+    <Animated.View style={[animatedStyle, { overflow: "hidden" }]}>
+      <View onLayout={onLayout} style={{ position: "absolute" }}>
+        {children}
+      </View>
+    </Animated.View>
+  );
+};
 
 export const ListItem = ({ item }: { item: ListItemType }) => {
   const [expanded, setExpanded] = useState(false);
@@ -26,9 +64,10 @@ export const ListItem = ({ item }: { item: ListItemType }) => {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      {expanded && (
+
+      <CollapsableContainer expanded={expanded}>
         <Text style={[styles.details, styles.text]}>{item.details}</Text>
-      )}
+      </CollapsableContainer>
     </View>
   );
 };
